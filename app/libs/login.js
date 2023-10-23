@@ -1,5 +1,5 @@
 const login = async (value) => {
-  const response = await fetch("http://localhost:5001/api/users/login", {
+  const response = await fetch("https://com-news-app-backend.onrender.com/api/users/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(value),

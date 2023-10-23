@@ -1,6 +1,6 @@
 const modifyArticle = async ({id,data}) => {
   const token = "Bearer " + localStorage.getItem("accessToken");
-  const response = await fetch(`http://localhost:5001/api/articles/${id}`, {
+  const response = await fetch(`https://com-news-app-backend.onrender.com/api/articles/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: token },
     body:JSON.stringify(data)

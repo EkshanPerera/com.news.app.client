@@ -1,6 +1,6 @@
 const createArticle = async (data) => {
   const token = "Bearer " + localStorage.getItem("accessToken");
-  const response = await fetch("http://localhost:5001/api/articles", {
+  const response = await fetch("https://com-news-app-backend.onrender.com", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: token },
     body:JSON.stringify(data)
