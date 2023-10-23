@@ -1,5 +1,5 @@
 const getArticles = async () =>{
-    const response = await fetch("https://com-news-app-backend.onrender.com",{
+    const response = await fetch("https://com-news-app-backend.onrender.com/api/articles",{
     cache:'no-cache'
     });
     if(!response.ok){
