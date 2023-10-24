@@ -1,6 +1,6 @@
 const createArticle = async (data) => {
   const token = "Bearer " + localStorage.getItem("accessToken");
-  const response = await fetch(`${process.env.SERVER_URL}/api/articles`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/articles`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: token },
     body:JSON.stringify(data)

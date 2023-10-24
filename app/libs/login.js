@@ -1,5 +1,5 @@
 const login = async (value) => {
-  const response = await fetch(`${process.env.SERVER_URL}/api/users/login`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(value),

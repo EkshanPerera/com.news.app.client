@@ -1,5 +1,5 @@
 const getArticle = async (id) => {
-    const response = await fetch(`${process.env.SERVER_URL}/api/articles/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/articles/${id}`, {
       cache: "no-cache",
     });
     if (!response.ok) {

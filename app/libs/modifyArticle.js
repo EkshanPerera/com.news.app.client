@@ -1,6 +1,6 @@
 const modifyArticle = async ({id,data}) => {
   const token = "Bearer " + localStorage.getItem("accessToken");
-  const response = await fetch(`${process.env.SERVER_URL}/api/articles/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/articles/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: token },
     body:JSON.stringify(data)
