@@ -2,7 +2,8 @@
 import React,{useState} from "react";
 import login from "../libs/login";
 import ErrorDisplay from "./ErrorDisplay";
-
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 const LoginForm = () =>{
     const [values,setValues] = useState({
         email : "",
@@ -13,14 +14,20 @@ const LoginForm = () =>{
         setValues({ ...values, [name]: value });
     }
     const [error,setError] = useState();
+    const router = useRouter();
+
     const submitHandler = async (event) =>{
         event.preventDefault();
         try {
             const response = await login(values);
             if(response.accessToken){
                 localStorage.setItem("accessToken",response.accessToken);
+                Cookies.set("loggedin", "true");
+                router.push("/dashboard")
             }else{
                 localStorage.removeItem("accessToken");
+                Cookies.set("loggedin", "false");
+                router.push("/login")
             }
         } catch (error) {
             localStorage.removeItem("accessToken");

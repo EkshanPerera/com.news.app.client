@@ -1,10 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import createArticle from "../libs/createArticle";
 import ErrorDisplay from "./ErrorDisplay";
 import modifyArticle from "../libs/modifyArticle";
+import ImageUploadBox from "./ImageUploadBox";
+import SuccessDisplay from "./SuccessDisplay";
+import Link from "next/link";
+
 
 const ArticleForm = (props) => {
   const [values, setValues] = useState({
@@ -13,9 +17,11 @@ const ArticleForm = (props) => {
     content: props.article ? props.article.content :"",
     image: props.article ? props.article.image :"",
   });
+  const router = useRouter();
   const [isLoading,setIsLoading] = useState(false); 
   const [error, setError] = useState(null);
-
+  const [success, setSuccess] = useState(null);
+  
   const changeHandler = (event) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
@@ -27,22 +33,61 @@ const ArticleForm = (props) => {
     try {
       if(!props.article){
         const response = await createArticle(values);
+        if(response.ok){
+          setSuccess('New article added successfully!');
+          setValues({
+            title :"",
+            description :"",
+            content :"",
+            image :""
+          })
+          setTimeout(() => {
+            setSuccess(null); 
+          }, 2500);
+        }
       }else{
         const id = props.article._id;
-        const response = await modifyArticle({id,values});
+        const response = await modifyArticle({values,id});
+        if(response.ok){
+          setSuccess('New article added successfully!');
+          setValues({
+            title :"",
+            description :"",
+            content :"",
+            image :""
+          })
+          setTimeout(() => {
+            setSuccess(null); 
+          }, 2500);
+        }
       }
     } catch (error) {
       setError(error.message);
       setIsLoading(false);
+      setValues({
+        title :"",
+        description :"",
+        content :"",
+        image :""
+      })
       setTimeout(() => {
         setError(null); 
       }, 2500);
     }
-  };
 
+  };
+  const setIMGURLHandler = (filename) => {
+    setValues({
+      ...values,
+      image:`${process.env.NEXT_PUBLIC_SERVER_URL}/uploads/${filename}`
+    })
+  }
   return (
     <div className="container mx-auto my-8">
+      <h2 className="text-2xl font-bold mb-4 max-w-xl mx-auto">{props.hedding}</h2>
        {error && <ErrorDisplay message={error}/>}
+       {success && <SuccessDisplay message={success}/>}
+       <ImageUploadBox setIMGURL={setIMGURLHandler} />
       <form onSubmit={submitHandler} className="max-w-xl mx-auto">
         <div className="mb-4">
           <label
@@ -65,12 +110,12 @@ const ArticleForm = (props) => {
             htmlFor="content"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Content
+          Description
           </label>
           <textarea
-            id="content"
-            name="content"
-            value={values.content || ""}
+            id="description"
+            name="description"
+            value={values.description || ""}
             onChange={changeHandler}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             rows="4"
@@ -81,17 +126,18 @@ const ArticleForm = (props) => {
             htmlFor="content"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-          Description
+            Content
           </label>
           <textarea
-            id="description"
-            name="description"
-            value={values.description || ""}
+            id="content"
+            name="content"
+            value={values.content || ""}
             onChange={changeHandler}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             rows="8"
           />
         </div>
+        
         <div className="mb-4">
           <label
             htmlFor="image"
@@ -106,7 +152,8 @@ const ArticleForm = (props) => {
             value={values.image || ""}
             onChange={changeHandler}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+          disabled/>
+          
         </div>
         <div className="flex items-center justify-center">
           <button
@@ -115,8 +162,10 @@ const ArticleForm = (props) => {
           >
             Submit
           </button>
+          <Link className="px-2" href='/dashboard'> Dashboard</Link>
         </div>
       </form>
+      
     </div>
   );
 };
