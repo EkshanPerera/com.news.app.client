@@ -49,13 +49,7 @@ const ArticleForm = (props) => {
         const id = props.article._id;
         const response = await modifyArticle({values,id});
         if(response.ok){
-          setSuccess('New article added successfully!');
-          setValues({
-            title :"",
-            description :"",
-            content :"",
-            image :""
-          })
+          setSuccess('Article modified successfully');
           setTimeout(() => {
             setSuccess(null); 
           }, 2500);
